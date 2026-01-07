@@ -4,10 +4,18 @@ import { Product } from '../types';
 interface Props {
   product: Product;
   inCart: boolean;
+  inWishlist: boolean;
   onToggle: (id: string) => void;
+  onToggleWishlist: (id: string) => void;
 }
 
-export function ProductCard({ product, inCart, onToggle }: Props) {
+export function ProductCard({ 
+  product, 
+  inCart, 
+  inWishlist, 
+  onToggle, 
+  onToggleWishlist 
+}: Props) {
   return (
     <article className="card">
       <div className="card__header">
@@ -22,6 +30,16 @@ export function ProductCard({ product, inCart, onToggle }: Props) {
       <div className="card__footer">
         <button onClick={() => onToggle(product.id)}>
           {inCart ? 'Remove' : 'Add to cart'}
+        </button>
+        <button 
+          onClick={() => onToggleWishlist(product.id)}
+          style={{ 
+            marginLeft: '8px',
+            background: inWishlist ? '#fbbf24' : 'transparent',
+            border: '1px solid #fbbf24'
+          }}
+        >
+          {inWishlist ? '❤️' : '🤍'}
         </button>
       </div>
     </article>

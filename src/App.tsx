@@ -2,10 +2,13 @@ import React from 'react';
 import { ProductList } from './components/ProductList';
 import { CartSummary } from './components/CartSummary';
 import { ShippingEstimator } from './components/ShippingEstimator';
+import { Wishlist } from './components/Wishlist';
 import { useInventory } from './hooks/useInventory';
+import { useWishlist } from './hooks/useWishlist';
 
 export default function App() {
   const { products, toggleInCart, inCartIds, totals } = useInventory();
+  const { wishlistIds, toggleWishlist, clearWishlist } = useWishlist();
 
   return (
     <div className="app">
@@ -23,10 +26,18 @@ export default function App() {
 
       <main>
         <ShippingEstimator totals={totals} />
+        <Wishlist
+          products={products}
+          wishlistIds={wishlistIds}
+          onRemove={toggleWishlist}
+          onClear={clearWishlist}
+        />
         <ProductList
           products={products}
           inCartIds={inCartIds}
+          wishlistIds={wishlistIds}
           onToggle={toggleInCart}
+          onToggleWishlist={toggleWishlist}
         />
       </main>
     </div>
