@@ -21,6 +21,14 @@ export function CartSummary({ totals, count }: Props) {
         <p className="label">Subtotal</p>
         <p className="value">${totals.subtotal.toFixed(2)}</p>
       </div>
+      {totals.discount > 0 && (
+        <div>
+          <p className="label">Discount</p>
+          <p className="value" style={{ color: '#10b981' }}>
+            -${totals.discount.toFixed(2)}
+          </p>
+        </div>
+      )}
       <div>
         <p className="label">Est. tax</p>
         <p className="value">${totals.tax.toFixed(2)}</p>
