@@ -48,6 +48,26 @@ h1 {
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
 }
 
+.estimator {
+  background: #e0f2fe;
+  border: 1px solid #bae6fd;
+  color: #0f172a;
+  padding: 14px 16px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.estimator .muted {
+  margin: 0;
+  color: #0f172a;
+  opacity: 0.8;
+  font-size: 14px;
+}
+
 .card {
   background: #fff;
   border: 1px solid #e2e8f0;

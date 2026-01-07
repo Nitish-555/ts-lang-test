@@ -8,6 +8,7 @@ const catalog: Product[] = [
     price: 199,
     category: 'Workspace',
     stock: 8,
+    weightKg: 4.5,
     description: 'Monitor shelf, cable tray, and anti-fatigue mat for long pairing sessions.',
   },
   {
@@ -16,6 +17,7 @@ const catalog: Product[] = [
     price: 129,
     category: 'Frontend',
     stock: 15,
+    weightKg: 1.1,
     description: 'Aria patterns, focus states, and contrast tokens pre-bundled for React apps.',
   },
   {
@@ -24,6 +26,7 @@ const catalog: Product[] = [
     price: 149,
     category: 'Platform',
     stock: 12,
+    weightKg: 1.8,
     description: 'Tracing, logging, and metrics scaffolding with sensible React hooks.',
   },
   {
@@ -32,6 +35,7 @@ const catalog: Product[] = [
     price: 89,
     category: 'Frontend',
     stock: 20,
+    weightKg: 0.9,
     description: 'Form validation helpers, progress affordances, and inline diff previews.',
   },
   {
@@ -40,6 +44,7 @@ const catalog: Product[] = [
     price: 259,
     category: 'Product',
     stock: 5,
+    weightKg: 2.3,
     description: 'Mock checkout flows, stubbed PSP integrations, and webhook replayers.',
   },
 ];
@@ -47,6 +52,7 @@ const catalog: Product[] = [
 export interface Totals {
   subtotal: number;
   tax: number;
+  shipping: number;
   total: number;
 }
 
@@ -66,12 +72,20 @@ export function useInventory() {
   };
 
   const totals = useMemo<Totals>(() => {
-    const subtotal = catalog
-      .filter((p) => inCartIds.has(p.id))
-      .reduce((sum, p) => sum + p.price, 0);
+    const selected = catalog.filter((p) => inCartIds.has(p.id));
+    const subtotal = selected.reduce((sum, p) => sum + p.price, 0);
+    const totalWeight = selected.reduce((sum, p) => sum + p.weightKg, 0);
+
+    // Simple shipping model: free over $250, otherwise base + weight factor.
+    const shipping =
+      subtotal >= 250
+        ? 0
+        : Math.round((8 + totalWeight * 1.5) * 100) / 100;
+
     const tax = Math.round(subtotal * 0.0825 * 100) / 100;
-    const total = subtotal + tax;
-    return { subtotal, tax, total };
+    const total = subtotal + tax + shipping;
+
+    return { subtotal, tax, shipping, total };
   }, [inCartIds]);
 
   return {

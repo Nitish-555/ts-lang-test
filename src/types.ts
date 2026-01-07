@@ -5,5 +5,6 @@ export interface Product {
   category: string;
   stock: number;
   description: string;
+  weightKg: number;
 }
 

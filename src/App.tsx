@@ -1,6 +1,7 @@
 import React from 'react';
 import { ProductList } from './components/ProductList';
 import { CartSummary } from './components/CartSummary';
+import { ShippingEstimator } from './components/ShippingEstimator';
 import { useInventory } from './hooks/useInventory';
 
 export default function App() {
@@ -21,6 +22,7 @@ export default function App() {
       </header>
 
       <main>
+        <ShippingEstimator totals={totals} />
         <ProductList
           products={products}
           inCartIds={inCartIds}

@@ -13,6 +13,10 @@ export function CartSummary({ totals, count }: Props) {
         <p className="label">Items</p>
         <p className="value">{count}</p>
       </div>
+    <div>
+      <p className="label">Shipping</p>
+      <p className="value">${totals.shipping.toFixed(2)}</p>
+    </div>
       <div>
         <p className="label">Subtotal</p>
         <p className="value">${totals.subtotal.toFixed(2)}</p>
