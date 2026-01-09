@@ -35,3 +35,28 @@ export function formatDiscount(discountPercentage: number): string {
   return `${discountPercentage}% OFF`;
 }
 
+/**
+ * Check if a discount is valid
+ * @param discountPercentage - Discount percentage to validate
+ * @returns True if discount is valid (between 0 and 100)
+ */
+export function isValidDiscount(discountPercentage: number | undefined): boolean {
+  if (discountPercentage === undefined) {
+    return false;
+  }
+  return discountPercentage >= 0 && discountPercentage <= 100;
+}
+
+/**
+ * Apply discount to a price if discount is valid
+ * @param price - Original price
+ * @param discountPercentage - Discount percentage (optional)
+ * @returns Discounted price or original price if discount is invalid
+ */
+export function applyDiscountIfValid(price: number, discountPercentage?: number): number {
+  if (!isValidDiscount(discountPercentage)) {
+    return price;
+  }
+  return getDiscountedPrice(price, discountPercentage!);
+}
+
