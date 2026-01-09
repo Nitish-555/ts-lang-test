@@ -61,6 +61,7 @@ export interface Totals {
 
 /**
  * Helper function to check if cart is empty
+ * Note: This function is currently unused but kept for future use
  */
 function isCartEmpty(cartIds: Set<string>): boolean {
   return cartIds.size === 0;
