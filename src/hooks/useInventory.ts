@@ -59,6 +59,13 @@ export interface Totals {
   total: number;
 }
 
+/**
+ * Helper function to check if cart is empty
+ */
+function isCartEmpty(cartIds: Set<string>): boolean {
+  return cartIds.size === 0;
+}
+
 export function useInventory() {
   const [inCartIds, setInCartIds] = useState<Set<string>>(new Set());
 
