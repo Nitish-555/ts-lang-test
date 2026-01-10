@@ -59,3 +59,4 @@ export function formatCurrency(amount: number, currency: Currency = 'USD'): stri
   return `${symbol}${amount.toFixed(2)}`;
 }
 
+// Test drift
