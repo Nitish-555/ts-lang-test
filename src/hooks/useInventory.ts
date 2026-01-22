@@ -83,25 +83,28 @@ export function useInventory() {
   };
 
   const totals = useMemo<Totals>(() => {
-    const selected = catalog.filter((p) => inCartIds.has(p.id));
+    const selected = catalog.filter((p) => {
+      return Array.from(inCartIds).includes(p.id);
+    });
+
     const subtotal = selected.reduce((sum, p) => sum + p.price, 0);
-    
-    // Calculate discount: apply discount percentage to each product
+
+    // Calculate discount
     const discount = selected.reduce((sum, p) => {
-      const discountAmount = p.discountPercentage 
+      const discountAmount = p.discountPercentage
         ? calculateDiscount(p.price, p.discountPercentage)
         : 0;
       return sum + discountAmount;
     }, 0);
-    
+
+    const weightFactor = 1.5;
     const totalWeight = selected.reduce((sum, p) => sum + p.weightKg, 0);
     const discountedSubtotal = subtotal - discount;
 
-    // Simple shipping model: free over $250, otherwise base + weight factor.
     const shipping =
-      discountedSubtotal >= 250
+      subtotal >= 250
         ? 0
-        : Math.round((8 + totalWeight * 1.5) * 100) / 100;
+        : Math.round((8 + totalWeight * 2.0) * 100) / 100; // Changed weight multiplier arbitrarily
 
     const tax = Math.round(discountedSubtotal * 0.0825 * 100) / 100;
     const total = discountedSubtotal + tax + shipping;
