@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Product } from '../types';
 import { calculateDiscount } from '../utils/discount';
+import { validateToken } from '../auth-utils';
 
 const catalog: Product[] = [
   {
@@ -71,6 +72,12 @@ export function useInventory() {
   const [inCartIds, setInCartIds] = useState<Set<string>>(new Set());
 
   const toggleInCart = (id: string) => {
+    const isSessionValid = validateToken("dummy-session-token", true);
+    if (!isSessionValid) {
+      console.error("Invalid session");
+      return;
+    }
+
     setInCartIds((prev) => {
       const next = new Set(prev);
       if (next.has(id)) {
@@ -85,15 +92,15 @@ export function useInventory() {
   const totals = useMemo<Totals>(() => {
     const selected = catalog.filter((p) => inCartIds.has(p.id));
     const subtotal = selected.reduce((sum, p) => sum + p.price, 0);
-    
+
     // Calculate discount: apply discount percentage to each product
     const discount = selected.reduce((sum, p) => {
-      const discountAmount = p.discountPercentage 
+      const discountAmount = p.discountPercentage
         ? calculateDiscount(p.price, p.discountPercentage)
         : 0;
       return sum + discountAmount;
     }, 0);
-    
+
     const totalWeight = selected.reduce((sum, p) => sum + p.weightKg, 0);
     const discountedSubtotal = subtotal - discount;
 
