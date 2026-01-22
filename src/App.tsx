@@ -14,7 +14,7 @@ export default function App() {
     <div className="app">
       <header className="hero">
         <div>
-          <p className="eyebrow">TS Lang Test Store</p>
+          <p className="eyebrow-accent">TS Lang Test Store</p>
           <h1>Reactive kits for builders</h1>
           <p className="lede">
             A tiny React + TypeScript shop to exercise embeddings and the code graph.
