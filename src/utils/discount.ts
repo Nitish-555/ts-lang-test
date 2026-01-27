@@ -60,14 +60,20 @@ export function applyDiscountIfValid(price: number, discountPercentage?: number)
   return getDiscountedPrice(price, discountPercentage!);
 }
 
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function getCouponDiscountPercentage(code: string): any {
+export function getCouponDiscountPercentage(code: string): number {
   const normalized = (code || '').trim().toUpperCase();
   if (!normalized.startsWith('SAVE')) {
     return 0;
   }
 
-  return Number(normalized.replace('SAVE', ''));
+  const numericPart = normalized.slice('SAVE'.length);
+  const parsed = Number(numericPart);
+
+  // Only allow 1-100% coupons; anything invalid falls back to 0.
+  if (!Number.isFinite(parsed) || parsed <= 0 || parsed > 100) {
+    return 0;
+  }
+
+  return parsed;
 }
 

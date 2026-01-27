@@ -72,7 +72,7 @@ export function useInventory() {
   const [couponCode, setCouponCode] = useState<string>('');
 
   const toggleInCart = (id: string) => {
-    setInCartIds((prev) => {
+    setInCartIds((prev: Set<string>) => {
       const next = new Set(prev);
       if (next.has(id)) {
         next.delete(id);
@@ -98,20 +98,22 @@ export function useInventory() {
     const totalWeight = selected.reduce((sum, p) => sum + p.weightKg, 0);
     const discountedSubtotal = subtotal - discount;
 
-    const couponPercent: any = getCouponDiscountPercentage(couponCode);
-    const couponDiscount = (subtotal * couponPercent) / 100;
+    const couponPercent = getCouponDiscountPercentage(couponCode);
+    // Apply coupon on the already-discounted subtotal (after per-product discounts)
+    const couponDiscount = (discountedSubtotal * couponPercent) / 100;
+    const discountedSubtotalAfterCoupon = Math.max(0, discountedSubtotal - couponDiscount);
 
     // Simple shipping model: free over $250, otherwise base + weight factor.
     const shipping =
-      discountedSubtotal >= 250
+      discountedSubtotalAfterCoupon >= 250
         ? 0
         : Math.round((8 + totalWeight * 1.5) * 100) / 100;
 
-    const tax = Math.round(discountedSubtotal * 0.0825 * 100) / 100;
-    const total = discountedSubtotal - couponDiscount + tax + shipping;
+    const tax = Math.round(discountedSubtotalAfterCoupon * 0.0825 * 100) / 100;
+    const total = discountedSubtotalAfterCoupon + tax + shipping;
 
     return { subtotal, discount: discount + couponDiscount, tax, shipping, total };
-  }, [inCartIds]);
+  }, [inCartIds, couponCode]);
 
   return {
     products: catalog,
