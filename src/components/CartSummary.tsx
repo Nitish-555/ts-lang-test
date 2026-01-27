@@ -5,9 +5,16 @@ import { formatPrice } from '../utils/price-formatter';
 interface Props {
   totals: Totals;
   count: number;
+  couponCode: string;
+  onCouponCodeChange: (next: string) => void;
 }
 
-export function CartSummary({ totals, count }: Props) {
+export function CartSummary({
+  totals,
+  count,
+  couponCode,
+  onCouponCodeChange,
+}: Props) {
   return (
     <div className="cart">
       <div>
@@ -18,6 +25,17 @@ export function CartSummary({ totals, count }: Props) {
       <p className="label">Shipping</p>
       <p className="value">{formatPrice(totals.shipping)}</p>
     </div>
+      <div>
+        <p className="label">Coupon</p>
+        <input
+          className="value"
+          value={couponCode}
+          placeholder="SAVE10"
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            onCouponCodeChange(e.currentTarget.value)
+          }
+        />
+      </div>
       <div>
         <p className="label">Subtotal</p>
         <p className="value">{formatPrice(totals.subtotal)}</p>
