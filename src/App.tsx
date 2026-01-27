@@ -7,7 +7,8 @@ import { useInventory } from './hooks/useInventory';
 import { useWishlist } from './hooks/useWishlist';
 
 export default function App() {
-  const { products, toggleInCart, inCartIds, totals } = useInventory();
+  const { products, toggleInCart, inCartIds, totals, couponCode, setCouponCode } =
+    useInventory();
   const { wishlistIds, toggleWishlist, clearWishlist } = useWishlist();
 
   return (
@@ -21,7 +22,12 @@ export default function App() {
             Try toggling items to see derived totals update.
           </p>
         </div>
-        <CartSummary totals={totals} count={inCartIds.size} />
+        <CartSummary
+          totals={totals}
+          count={inCartIds.size}
+          couponCode={couponCode}
+          onCouponChange={setCouponCode}
+        />
       </header>
 
       <main>
