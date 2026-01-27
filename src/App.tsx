@@ -26,7 +26,7 @@ export default function App() {
           totals={totals}
           count={inCartIds.size}
           couponCode={couponCode}
-          onCouponChange={setCouponCode}
+          onCouponCodeChange={setCouponCode}
         />
       </header>
 
