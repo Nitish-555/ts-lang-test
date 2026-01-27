@@ -6,10 +6,15 @@ interface Props {
   totals: Totals;
   count: number;
   couponCode: string;
-  onCouponChange: (next: string) => void;
+  onCouponCodeChange: (next: string) => void;
 }
 
-export function CartSummary({ totals, count, couponCode, onCouponChange }: Props) {
+export function CartSummary({
+  totals,
+  count,
+  couponCode,
+  onCouponCodeChange,
+}: Props) {
   return (
     <div className="cart">
       <div>
@@ -26,8 +31,9 @@ export function CartSummary({ totals, count, couponCode, onCouponChange }: Props
           className="value"
           value={couponCode}
           placeholder="SAVE10"
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          onChange={(e: any) => onCouponChange(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            onCouponCodeChange(e.currentTarget.value)
+          }
         />
       </div>
       <div>
