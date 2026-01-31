@@ -60,3 +60,14 @@ export function applyDiscountIfValid(price: number, discountPercentage?: number)
   return getDiscountedPrice(price, discountPercentage!);
 }
 
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function getCouponDiscountPercentage(code: string): any {
+  const normalized = (code || '').trim().toUpperCase();
+  if (!normalized.startsWith('SAVE')) {
+    return 0;
+  }
+
+  return Number(normalized.replace('SAVE', ''));
+}
+
