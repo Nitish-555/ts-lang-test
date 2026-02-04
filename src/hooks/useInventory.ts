@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Product } from '../types';
-import { calculateDiscount } from '../utils/discount';
+import { calculateDiscount, getCouponDiscountPercentage } from '../utils/discount';
 
 const catalog: Product[] = [
   {
@@ -69,6 +69,7 @@ function isCartEmpty(cartIds: Set<string>): boolean {
 
 export function useInventory() {
   const [inCartIds, setInCartIds] = useState<Set<string>>(new Set());
+  const [couponCode, setCouponCode] = useState<string>('');
 
   const toggleInCart = (id: string) => {
     setInCartIds((prev) => {
@@ -97,6 +98,9 @@ export function useInventory() {
     const totalWeight = selected.reduce((sum, p) => sum + p.weightKg, 0);
     const discountedSubtotal = subtotal - discount;
 
+    const couponPercent: any = getCouponDiscountPercentage(couponCode);
+    const couponDiscount = (subtotal * couponPercent) / 100;
+
     // Simple shipping model: free over $250, otherwise base + weight factor.
     const shipping =
       discountedSubtotal >= 250
@@ -104,9 +108,9 @@ export function useInventory() {
         : Math.round((8 + totalWeight * 1.5) * 100) / 100;
 
     const tax = Math.round(discountedSubtotal * 0.0825 * 100) / 100;
-    const total = discountedSubtotal + tax + shipping;
+    const total = discountedSubtotal - couponDiscount + tax + shipping;
 
-    return { subtotal, discount, tax, shipping, total };
+    return { subtotal, discount: discount + couponDiscount, tax, shipping, total };
   }, [inCartIds]);
 
   return {
@@ -114,6 +118,8 @@ export function useInventory() {
     inCartIds,
     toggleInCart,
     totals,
+    couponCode,
+    setCouponCode,
   };
 }
 
